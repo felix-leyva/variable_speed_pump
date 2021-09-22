@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:variable_speed_pump/models/pump_curve/pump_curve_logic.dart';
 import 'package:variable_speed_pump/syncfusion_line_chart.dart';
 
-import 'models/pump_curve/pump_curve_provider.dart';
+import 'models/get_it.dart';
 
 void main() {
+  setup();
   runApp(MyApp());
 }
 
@@ -12,17 +13,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => PumpCurveProvider()),
-      ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: MyHomePage(title: 'Flutter Demo Home Page'),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -53,10 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 fontSize: 30.0,
               ),
             ),
-            LineChart(),
+            PumpPowerCurveChart(),
             TextButton(
-                onPressed: () =>
-                    context.read<PumpCurveProvider>().changeHeadListTest(),
+                onPressed: () => gi<PumpCurveLogic>().changeHeadListTest(),
                 child: Text("Change Me"))
             // LineChartSample2(),
             // GraphTest(),

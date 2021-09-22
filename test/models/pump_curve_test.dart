@@ -54,10 +54,10 @@ void test_creating_pump_curve_with_lower_speed() {
     var pumpCurves = PumpCurve(rpm: 3600, points: pumpCurve);
     var newPumpCurve = pumpCurves.pumpCurveWithSpeed(newSpeedPercentage);
     if (newPumpCurve == null) throw ("Null value returned");
-    expect(newPumpCurve.points[7].flow.roundD(1), 111.7);
-    expect(newPumpCurve.points[7].head.roundD(1), 58.9);
-    expect(newPumpCurve.points[0].flow.roundD(1), 502.6);
-    expect(newPumpCurve.points[0].head.roundD(1), 29.5);
+    expect(newPumpCurve.points[0].flow.roundD(1), 111.7);
+    expect(newPumpCurve.points[0].head.roundD(1), 58.9);
+    expect(newPumpCurve.points[7].flow.roundD(1), 502.6);
+    expect(newPumpCurve.points[7].head.roundD(1), 29.5);
   });
 
   test("test creating a pump curve with 45Hz less speed", () {
@@ -65,10 +65,10 @@ void test_creating_pump_curve_with_lower_speed() {
     var pumpCurves = PumpCurve(rpm: 3600, points: pumpCurve);
     var newPumpCurve = pumpCurves.pumpCurveWithSpeed(newSpeedPercentage);
     if (newPumpCurve == null) throw ("Null value returned");
-    expect(newPumpCurve.points[0].flow.roundD(1), 383.3);
-    expect(newPumpCurve.points[0].head.roundD(1), 17.1);
-    expect(newPumpCurve.points[7].flow.roundD(1), 85.2);
-    expect(newPumpCurve.points[7].head.roundD(1), 34.3);
+    expect(newPumpCurve.points[7].flow.roundD(1), 383.3);
+    expect(newPumpCurve.points[7].head.roundD(1), 17.1);
+    expect(newPumpCurve.points[0].flow.roundD(1), 85.2);
+    expect(newPumpCurve.points[0].head.roundD(1), 34.3);
   });
 }
 
@@ -79,13 +79,12 @@ void test_creating_various_pump_curves_with_lower_speed() {
     final variousPumpCurves = await myPumpCurve.pumpCurvesWithSpeedRanges();
     if (variousPumpCurves == null) throw ("Null value returned");
     final pcp1 = variousPumpCurves[59];
-    print(pcp1.points[0].flow);
     final pcp2 = variousPumpCurves[29];
 
-    expect(pcp1.points[7].flow.roundD(1), 56.8);
-    expect(pcp1.points[7].head.roundD(1), 15.2);
-    expect(pcp2.points[4].flow.roundD(1), 213);
-    expect(pcp2.points[4].head.roundD(1), 30.5);
+    expect(pcp1.points[0].flow.roundD(1), 56.8);
+    expect(pcp1.points[0].head.roundD(1), 15.2);
+    expect(pcp2.points[3].flow.roundD(1), 213);
+    expect(pcp2.points[3].head.roundD(1), 30.5);
   });
 
   test("test creating a pump curve with 45Hz less speed", () {
@@ -93,10 +92,10 @@ void test_creating_various_pump_curves_with_lower_speed() {
     var pumpCurves = PumpCurve(rpm: 3600, points: pumpCurve);
     var newPumpCurve = pumpCurves.pumpCurveWithSpeed(newSpeedPercentage);
     if (newPumpCurve == null) throw ("Null value returned");
-    expect(newPumpCurve.points[0].flow.roundD(1), 383.3);
-    expect(newPumpCurve.points[0].head.roundD(1), 17.1);
-    expect(newPumpCurve.points[7].flow.roundD(1), 85.2);
-    expect(newPumpCurve.points[7].head.roundD(1), 34.3);
+    expect(newPumpCurve.points[7].flow.roundD(1), 383.3);
+    expect(newPumpCurve.points[7].head.roundD(1), 17.1);
+    expect(newPumpCurve.points[0].flow.roundD(1), 85.2);
+    expect(newPumpCurve.points[0].head.roundD(1), 34.3);
   });
 }
 

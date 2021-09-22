@@ -39,8 +39,10 @@ class PumpCurve {
 
   PumpCurve? pumpCurveWithSpeed(double percentage) {
     if (percentage < 0 || percentage > 1) return null;
-    List<PumpCurvePoint> newPoints =
-        points.map((pcp) => pcp.withLowerSpeed(percentage)).toList();
+    List<PumpCurvePoint> newPoints = points
+        .map((pcp) => pcp.withLowerSpeed(percentage))
+        .toList()
+      ..sort((a, b) => a.flow.compareTo(b.flow));
     return PumpCurve(rpm: rpm * percentage, points: newPoints);
   }
 
@@ -74,6 +76,7 @@ class PumpCurve {
       final powerPumpPoint = pc.getPointWithHead(head);
       if (powerPumpPoint != null) powerPumpCurvePoints.add(powerPumpPoint);
     });
+    powerPumpCurvePoints.sort((a, b) => a.flow.compareTo(b.flow));
     return PowerPumpCurve(head: head, points: powerPumpCurvePoints);
   }
 }

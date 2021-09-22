@@ -1,43 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:variable_speed_pump/models/pump_curve/pump_curve_provider.dart';
+import 'package:variable_speed_pump/models/pump_curve/pump_curve_logic.dart';
 import 'package:variable_speed_pump/utils/math_functions.dart';
 
 import 'models/pump_curve_point.dart';
 
-class LineChart extends StatefulWidget {
-  const LineChart({Key? key}) : super(key: key);
-
-  @override
-  _LineChartState createState() => _LineChartState();
-}
-
-class _LineChartState extends State<LineChart> {
-  late TooltipBehavior _tooltipBehavior;
-  @override
-  void initState() {
-    _tooltipBehavior = TooltipBehavior(
-      enable: true,
-      shared: true,
-    );
-    super.initState();
-  }
+class PumpPowerCurveChart extends StatelessWidget with GetItMixin {
+  PumpPowerCurveChart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final pumpCurvesWithHeads =
-        context.watch<PumpCurveProvider>().pumpCurvesWithHeads;
+        watchX((PumpCurveLogic pcl) => pcl.pumpCurvesWithHeads);
 
     return SfCartesianChart(
       primaryXAxis: NumericAxis(),
       legend: Legend(isVisible: true),
       // crosshairBehavior: _crosshairBehavior,
-      tooltipBehavior: _tooltipBehavior,
+      tooltipBehavior: TooltipBehavior(
+        enable: true,
+        shared: true,
+      ),
       series: series(pumpCurvesWithHeads),
     );
   }
 
+  //generates the different pump curve lines
   List<LineSeries<PumpCurvePoint, double>> series(
       List<List<PumpCurvePoint>> pumpCurvesWithHeads) {
     return pumpCurvesWithHeads
