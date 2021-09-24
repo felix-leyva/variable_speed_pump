@@ -12,13 +12,31 @@ class PumpPowerCurveChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pumpCurvesWithHeads = gi<PumpCurveLogic>();
+    const axisLabelSize = 10.0;
 
     return ValueListenableBuilder<List<List<PumpCurvePoint>>>(
         valueListenable: pumpCurvesWithHeads.pumpCurvesWithHeads,
         builder: (context, pumpCurvesWithHeads, _) {
           return SfCartesianChart(
-            primaryXAxis: NumericAxis(),
-            legend: Legend(isVisible: true),
+            primaryXAxis: NumericAxis(
+              title: AxisTitle(
+                text: 'Brake Power (HP)',
+                textStyle: TextStyle(fontSize: axisLabelSize),
+              ),
+            ),
+            primaryYAxis: NumericAxis(
+              title: AxisTitle(
+                text: 'Flow (m3/h)',
+                textStyle: TextStyle(fontSize: axisLabelSize),
+              ),
+            ),
+            legend: Legend(
+              borderWidth: 1,
+              borderColor: Colors.black87,
+              title: LegendTitle(text: 'Pump Head'),
+              isVisible: false,
+              position: LegendPosition.bottom,
+            ),
             // crosshairBehavior: _crosshairBehavior,
             tooltipBehavior: TooltipBehavior(
               enable: true,

@@ -21,6 +21,8 @@ void setupApp() async {
 
   gi.registerSingletonWithDependencies<PumpCurveLogic>(
     () => PumpCurveLogic(),
-    dependsOn: [PumpCurvesSources],
+    dependsOn: [
+      PumpCurvesSources,
+    ],
   );
 }

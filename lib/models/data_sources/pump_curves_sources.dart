@@ -17,7 +17,7 @@ class PumpCurvesDB extends PumpCurvesSources {
     setupBox();
   }
 
-  void setupBox() async {
+  void setupBox() {
     if (pumpCurvesBox.isEmpty) {
       pumpCurvesBox.put(defaultPumpCurveName, pumpCurve);
     }
