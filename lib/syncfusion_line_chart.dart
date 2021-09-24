@@ -1,29 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:variable_speed_pump/models/pump_curve/pump_curve_logic.dart';
 import 'package:variable_speed_pump/utils/math_functions.dart';
 
 import 'models/pump_curve_point.dart';
+import 'models/setupApp.dart';
 
-class PumpPowerCurveChart extends StatelessWidget with GetItMixin {
+class PumpPowerCurveChart extends StatelessWidget {
   PumpPowerCurveChart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final pumpCurvesWithHeads =
-        watchX((PumpCurveLogic pcl) => pcl.pumpCurvesWithHeads);
+    final pumpCurvesWithHeads = gi<PumpCurveLogic>();
 
-    return SfCartesianChart(
-      primaryXAxis: NumericAxis(),
-      legend: Legend(isVisible: true),
-      // crosshairBehavior: _crosshairBehavior,
-      tooltipBehavior: TooltipBehavior(
-        enable: true,
-        shared: true,
-      ),
-      series: series(pumpCurvesWithHeads),
-    );
+    return ValueListenableBuilder<List<List<PumpCurvePoint>>>(
+        valueListenable: pumpCurvesWithHeads.pumpCurvesWithHeads,
+        builder: (context, pumpCurvesWithHeads, _) {
+          return SfCartesianChart(
+            primaryXAxis: NumericAxis(),
+            legend: Legend(isVisible: true),
+            // crosshairBehavior: _crosshairBehavior,
+            tooltipBehavior: TooltipBehavior(
+              enable: true,
+              shared: true,
+            ),
+            series: series(pumpCurvesWithHeads),
+          );
+        });
   }
 
   //generates the different pump curve lines

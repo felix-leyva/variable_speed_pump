@@ -3,6 +3,9 @@ import 'package:variable_speed_pump/models/pump_curve_point.dart';
 const double gravity = 9.81;
 const double kWtoHPFactor = 0.745699872;
 
+const String pumpCurveBoxName = 'pump_curves_box';
+const String defaultPumpCurveName = 'default_pump_curve';
+
 final List<PumpCurvePoint> pumpCurve = [
   PumpCurvePoint.withEfficiency(pumpEndEff: .6, flow: 113.58, head: 60.96),
   PumpCurvePoint.withEfficiency(pumpEndEff: .72, flow: 170.38, head: 59.44),

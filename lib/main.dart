@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:variable_speed_pump/models/pump_curve/pump_curve_logic.dart';
 import 'package:variable_speed_pump/syncfusion_line_chart.dart';
 
-import 'models/get_it.dart';
+import 'models/pump_curve/pump_curve_logic.dart';
+import 'models/setupApp.dart';
 
-void main() {
-  setup();
+void main() async {
+  setupApp();
   runApp(MyApp());
 }
 
@@ -40,24 +40,32 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text('Graph test'),
         ),
-        body: ListView(
-          shrinkWrap: true,
-          children: [
-            Text(
-              'Pump Curve Graphs',
-              style: TextStyle(
-                fontSize: 30.0,
-              ),
-            ),
-            PumpPowerCurveChart(),
-            TextButton(
-                onPressed: () => gi<PumpCurveLogic>().changeHeadListTest(),
-                child: Text("Change Me"))
-            // LineChartSample2(),
-            // GraphTest(),
-            // LineChartSample1(),
-          ],
-        ),
+        body: FutureBuilder<void>(
+            future: gi.allReady(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              } else
+                return ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Text(
+                      'Pump Curve Graphs',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                      ),
+                    ),
+                    PumpPowerCurveChart(),
+                    TextButton(
+                        onPressed: () =>
+                            gi<PumpCurveLogic>().changeHeadListTest(),
+                        child: Text("Change Me"))
+                    // LineChartSample2(),
+                    // GraphTest(),
+                    // LineChartSample1(),
+                  ],
+                );
+            }),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:variable_speed_pump/utils/constants.dart';
+import 'package:get_it/get_it.dart';
+import 'package:variable_speed_pump/models/data_sources/pump_curves_sources.dart';
 
 import '../pump_curve.dart';
 import '../pump_curve_point.dart';
@@ -16,8 +17,9 @@ class PumpCurveLogic {
   final pumpCurvesWithHeads = ValueNotifier<List<List<PumpCurvePoint>>>([]);
 
   PumpCurveLogic({List<PumpCurvePoint>? pumpCurves, List<double>? heads}) {
-    headList = heads ?? [30, 50];
-    _currentPumpCurvePoints = pumpCurves ?? pumpCurve;
+    this._currentPumpCurvePoints =
+        pumpCurves ?? GetIt.I<PumpCurvesSources>().getPumpCurves(null);
+    this.headList = heads ?? [_currentPumpCurvePoints.last.head];
     setupPumpCurvesWithHeads();
   }
 
@@ -27,7 +29,7 @@ class PumpCurveLogic {
   }
 
   List<PumpCurvePoint> curveWithHead(double head) {
-    return PumpCurve(rpm: 3600.0, points: pumpCurve)
+    return PumpCurve(rpm: 3600.0, points: _currentPumpCurvePoints)
         .powerPumpCurveWithHead(head: head, steps: 120)
         .points
         .reversed
