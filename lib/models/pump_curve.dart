@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:equations/equations.dart';
 import 'package:variable_speed_pump/models/pump_curve_point.dart';
 
-import 'PowerPumpCurve.dart';
+import 'power_pump_curve.dart';
 
 class PumpCurve {
   final double rpm;

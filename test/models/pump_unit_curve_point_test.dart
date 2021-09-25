@@ -54,5 +54,21 @@ void test_constructing_withPumpEndEfficiency() {
       expect(
           pumpUnitCurvePoint.pumpCurvePoint.pumpEndEff.roundD(2), pumpEndEff);
     });
+
+    test(
+        'test requiredPower with maximum load of motor - should return the motor'
+        'efficiency at max load times bkW of pump curve point', () {
+      //Prepare
+      PumpCurvePoint pumpCurvePoint =
+          PumpCurvePoint.withBHPower(bHp: bHp, head: head, flow: flow);
+      Motor motor = Motor(37);
+      PumpUnitCurvePoint pumpUnitCurvePoint =
+          PumpUnitCurvePoint(pumpCurvePoint: pumpCurvePoint, motor: motor);
+      double motorMaxEff = .939;
+
+      //Get
+      double requiredkW = pumpUnitCurvePoint.requiredkW;
+      expect(requiredkW, pumpCurvePoint.bkW / motorMaxEff);
+    });
   });
 }

@@ -8,8 +8,12 @@ import 'motor.dart';
 class PumpUnitCurvePoint {
   late PumpCurvePoint pumpCurvePoint;
   late Motor motor;
-  double get motorkW => motor.power;
-  double get motorHP => kWtoHPFactor * motorkW;
+  double get motorkW => motor.powerkW;
+  double get motorHP => motorkW / kWtoHPFactor;
+  double get motorPartialEff =>
+      motor.getPartialEff(pumpCurvePoint.bkW / motorkW);
+  double get requiredkW => pumpCurvePoint.bkW / motorPartialEff;
+  double get efficiency => pumpCurvePoint.wkW / requiredkW;
 
   PumpUnitCurvePoint({required this.pumpCurvePoint, required this.motor});
 

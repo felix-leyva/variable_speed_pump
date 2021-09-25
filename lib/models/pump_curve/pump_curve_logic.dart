@@ -5,10 +5,14 @@ import 'package:get_it/get_it.dart';
 import 'package:variable_speed_pump/models/data_sources/pump_curves_sources.dart';
 import 'package:variable_speed_pump/utils/math_functions.dart';
 
+import '../power_pu_curve.dart';
+import '../power_pump_curve.dart';
 import '../pump_curve.dart';
 import '../pump_curve_point.dart';
 
-class PumpCurveLogic {
+class PowerPumpCurveLogic {
+  bool powerPUCurvesActive = true;
+
   late List<PumpCurvePoint> _currentPumpCurvePoints;
   List<PumpCurvePoint> get currentPumpCurvePoints => _currentPumpCurvePoints;
   set currentPumpCurvePoints(List<PumpCurvePoint> newList) {
@@ -18,12 +22,13 @@ class PumpCurveLogic {
   late List<double> _headList;
   ValueNotifier<List<double>> headList = ValueNotifier<List<double>>([]);
 
-  final pumpCurvesWithHeads = ValueNotifier<List<List<PumpCurvePoint>>>([]);
+  final powerPumpCurves = ValueNotifier<List<PowerPumpCurve>>([]);
+  final powerPUCurves = ValueNotifier<List<PowerPUCurve>>([]);
 
   double minHead = 0.0;
   double maxHead = 0.0;
 
-  PumpCurveLogic({List<PumpCurvePoint>? pumpCurves, List<double>? heads}) {
+  PowerPumpCurveLogic({List<PumpCurvePoint>? pumpCurves, List<double>? heads}) {
     this._currentPumpCurvePoints =
         pumpCurves ?? GetIt.I<PumpCurvesSources>().getPumpCurves(null);
 
@@ -31,14 +36,26 @@ class PumpCurveLogic {
     double startHead = ((minHead + maxHead) * 0.6).roundD(1);
     this._headList = heads ?? [startHead];
 
-    setupPumpCurvesWithHeads();
+    updateValueNotifiers();
   }
 
-  void setupPumpCurvesWithHeads() {
+  void setupPowerPumpCurvesWithHeads() {
+    powerPumpCurves.value = _headList.map((head) {
+      final List<PumpCurvePoint> points = curveWithHead(head);
+      return PowerPumpCurve(head: head, points: points);
+    }).toList();
+  }
+
+  void setupPowerPUCurvesWithHeads() {
+    powerPUCurves.value = powerPumpCurves.value
+        .map((powerPumpCurve) => powerPumpCurve.generatePowerPUCurve())
+        .toList();
+  }
+
+  //TODO: remove this function because headlist valuenotifier wont be used anymore
+  void setupHeadList() {
     headList.value = _headList;
-    pumpCurvesWithHeads.value =
-        _headList.map((head) => curveWithHead(head)).toList();
-    headList.notifyListeners();
+    //headList.notifyListeners();
   }
 
   List<PumpCurvePoint> curveWithHead(double head) {
@@ -57,7 +74,12 @@ class PumpCurveLogic {
     } else {
       _headList.add(newValue.roundD(1));
     }
-    setupPumpCurvesWithHeads();
+    updateValueNotifiers();
+  }
+
+  void changeMainHead(double newValue) {
+    _headList[0] = newValue.roundD(1);
+    updateValueNotifiers();
   }
 
   void setupMinMaxHead() {
@@ -71,12 +93,9 @@ class PumpCurveLogic {
     this.maxHead = (max * 0.98).roundD(1);
   }
 
-  // void changeHeadListTest() {
-  //   if (_headList.first == 30) {
-  //     _headList.first = 40.0;
-  //   } else {
-  //     _headList.first = 30.0;
-  //   }
-  //   setupPumpCurvesWithHeads();
-  // }
+  void updateValueNotifiers() {
+    setupHeadList();
+    setupPowerPumpCurvesWithHeads();
+    if (powerPUCurvesActive) setupPowerPUCurvesWithHeads();
+  }
 }

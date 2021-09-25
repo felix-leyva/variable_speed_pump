@@ -3,12 +3,12 @@ import 'dart:collection';
 import 'package:variable_speed_pump/utils/constants.dart';
 
 class Motor {
-  final double power;
+  final double powerkW;
   late final double ratedEfficiency;
   final double frequency;
 
-  Motor(this.power, {this.frequency = 50.0}) {
-    this.ratedEfficiency = getAverageMotorEff(power);
+  Motor(this.powerkW, {this.frequency = 50.0}) {
+    this.ratedEfficiency = getAverageMotorEff(powerkW);
   }
 
   static double getAverageMotorEff(double bkW) {
@@ -17,7 +17,7 @@ class Motor {
 
   double getPartialEff(double partialLoad) {
     int indexPower = normalizedMotorsEff
-        .indexWhere(((element) => this.power <= element.power));
+        .indexWhere(((element) => this.powerkW <= element.power));
 
     if (indexPower <= 0) {
       return ratedEfficiency *
@@ -34,7 +34,7 @@ class Motor {
       double effB = linearInterpolate(
           partialLoad, normalizedMotorsEff[indexPower].values);
       return ratedEfficiency *
-          (effA + ((effB - effA) * ((power - pA) / (pB - pA))));
+          (effA + ((effB - effA) * ((powerkW - pA) / (pB - pA))));
     }
   }
 }

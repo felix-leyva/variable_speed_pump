@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:variable_speed_pump/syncfusion_line_chart.dart';
 
+import 'models/power_pump_curve.dart';
 import 'models/pump_curve/pump_curve_logic.dart';
 import 'models/setupApp.dart';
 
@@ -62,9 +63,9 @@ class PowerPumpCurveLoader extends StatelessWidget {
         future: Future.delayed(Duration(seconds: 1)),
         builder: (context, snapshot) {
           //TODO: after testing remove this print
-          print("${Timeline.now}, ${gi.isRegistered<PumpCurveLogic>()}");
-          if (gi.isRegistered<PumpCurveLogic>() &&
-              gi.isReadySync<PumpCurveLogic>()) {
+          print("${Timeline.now}, ${gi.isRegistered<PowerPumpCurveLogic>()}");
+          if (gi.isRegistered<PowerPumpCurveLogic>() &&
+              gi.isReadySync<PowerPumpCurveLogic>()) {
             return PowerPumpCurveBody();
           } else
             return Center(child: CircularProgressIndicator());
@@ -79,71 +80,84 @@ class PowerPumpCurveBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pumpCurveLogic = gi.get<PumpCurveLogic>();
+    final pumpCurveLogic = gi.get<PowerPumpCurveLogic>();
 
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Text(
-          'Pump Curve Graphs',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 30.0),
-        ),
-        PumpPowerCurveChart(),
-        SizedBox(
-          height: 5,
-        ),
-        ValueListenableBuilder<List<double>>(
-          valueListenable: pumpCurveLogic.headList,
-          builder: (context, headlist, _) {
-            final styleTitle =
-                TextStyle(fontWeight: FontWeight.bold, fontSize: 12);
-            return Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black26),
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 25, right: 25, top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            Text('Min', style: styleTitle),
-                            Text('${pumpCurveLogic.minHead}'),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text('Pump Head', style: styleTitle),
-                            Text('${headlist[0]}'),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text('Max', style: styleTitle),
-                            Text('${pumpCurveLogic.maxHead}'),
-                          ],
-                        ),
-                      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.only(right: 8),
+              shrinkWrap: true,
+              children: [
+                Text(
+                  'Pump Curves with Variable Power',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20.0),
+                ),
+                // PumpPowerCurveChart(),
+                PUPowerCurveChart(),
+                Container(
+                  height: 150,
+                  child: EfficiencyCurveChart(),
+                ),
+              ],
+            ),
+          ),
+          ValueListenableBuilder<List<PowerPumpCurve>>(
+            valueListenable: pumpCurveLogic.powerPumpCurves,
+            builder: (context, powerPumpCurves, _) {
+              final styleTitle =
+                  TextStyle(fontWeight: FontWeight.bold, fontSize: 12);
+              return Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black26),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 25, right: 25, top: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Text('Min', style: styleTitle),
+                              Text('${pumpCurveLogic.minHead} m'),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text('Pump Head (TDH)', style: styleTitle),
+                              Text('${powerPumpCurves[0].head} m'),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text('Max', style: styleTitle),
+                              Text('${pumpCurveLogic.maxHead} m'),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Slider(
-                      value: headlist[0],
-                      max: pumpCurveLogic.maxHead,
-                      min: pumpCurveLogic.minHead,
-                      onChanged: (newVal) =>
-                          pumpCurveLogic.changeHead(headlist[0], newVal)),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
+                    Slider(
+                        value: powerPumpCurves[0].head,
+                        max: pumpCurveLogic.maxHead,
+                        min: pumpCurveLogic.minHead,
+                        onChanged: (newVal) =>
+                            pumpCurveLogic.changeMainHead(newVal)),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

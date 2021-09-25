@@ -3,10 +3,10 @@ import 'package:variable_speed_pump/models/pump_curve/pump_curve_logic.dart';
 import 'package:variable_speed_pump/utils/constants.dart';
 
 void main() {
-  late PumpCurveLogic pcl;
+  late PowerPumpCurveLogic pcl;
 
   setUp(() {
-    pcl = PumpCurveLogic(pumpCurves: pumpCurve);
+    pcl = PowerPumpCurveLogic(pumpCurves: pumpCurve);
   });
   test('setup Min Max gets the pump curve points min and max head', () {
     pcl.setupMinMaxHead();
