@@ -1,7 +1,6 @@
 import 'package:hive/hive.dart';
+import 'package:variable_speed_pump/models/pump_curve_points/pump_curve_point.dart';
 import 'package:variable_speed_pump/utils/constants.dart';
-
-import '../pump_curve_point.dart';
 
 abstract class PumpCurvesSources {
   List<String> getListOfPumpCurves();

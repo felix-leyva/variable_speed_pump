@@ -1,15 +1,21 @@
 import 'dart:collection';
 
+import 'package:hive/hive.dart';
 import 'package:variable_speed_pump/utils/constants.dart';
 
+part 'motor.g.dart';
+
+@HiveType(typeId: 2)
 class Motor {
+  @HiveField(0)
   final double powerkW;
-  late final double ratedEfficiency;
+
+  double get ratedEfficiency => getAverageMotorEff(powerkW);
+
+  @HiveField(1)
   final double frequency;
 
-  Motor(this.powerkW, {this.frequency = 50.0}) {
-    this.ratedEfficiency = getAverageMotorEff(powerkW);
-  }
+  Motor(this.powerkW, {this.frequency = 50.0});
 
   static double getAverageMotorEff(double bkW) {
     return linearInterpolate(bkW, kEfficiencyMotorsFullLoad);

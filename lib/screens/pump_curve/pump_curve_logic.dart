@@ -2,13 +2,12 @@ import 'dart:core';
 
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:variable_speed_pump/models/data_sources/pump_curves_sources.dart';
-import 'package:variable_speed_pump/utils/math_functions.dart';
-
-import '../power_pu_curve.dart';
-import '../power_pump_curve.dart';
-import '../pump_curve.dart';
-import '../pump_curve_point.dart';
+import 'package:variable_speed_pump/data_sources/pump_curves_sources.dart';
+import 'package:variable_speed_pump/models/power_pump_curve.dart';
+import 'package:variable_speed_pump/models/power_pump_unit_curve.dart';
+import 'package:variable_speed_pump/models/pump_curve/pump_curve.dart';
+import 'package:variable_speed_pump/models/pump_curve_points/pump_curve_point.dart';
+import 'package:variable_speed_pump/utils/functions.dart';
 
 class PowerPumpCurveLogic {
   bool powerPUCurvesActive = true;
@@ -23,7 +22,7 @@ class PowerPumpCurveLogic {
   ValueNotifier<List<double>> headList = ValueNotifier<List<double>>([]);
 
   final powerPumpCurves = ValueNotifier<List<PowerPumpCurve>>([]);
-  final powerPUCurves = ValueNotifier<List<PowerPUCurve>>([]);
+  final powerPUCurves = ValueNotifier<List<PowerPumpUnitCurve>>([]);
 
   double minHead = 0.0;
   double maxHead = 0.0;
@@ -42,7 +41,8 @@ class PowerPumpCurveLogic {
   void setupPowerPumpCurvesWithHeads() {
     powerPumpCurves.value = _headList.map((head) {
       final List<PumpCurvePoint> points = curveWithHead(head);
-      return PowerPumpCurve(head: head, points: points);
+      return PowerPumpCurve.fromPointsVariablePower(
+          head: head, variablePowerPoints: points);
     }).toList();
   }
 
@@ -58,6 +58,8 @@ class PowerPumpCurveLogic {
     //headList.notifyListeners();
   }
 
+  ///Generates a PumpCurve with the list of points and then
+  ///returns the variable power pump curve
   List<PumpCurvePoint> curveWithHead(double head) {
     return PumpCurve(rpm: 3600.0, points: _currentPumpCurvePoints)
         .powerPumpCurveWithHead(head: head, steps: 120)

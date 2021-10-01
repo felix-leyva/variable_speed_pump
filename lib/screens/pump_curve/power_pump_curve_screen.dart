@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:variable_speed_pump/models/pump_curve/pump_curve_logic.dart';
-import 'package:variable_speed_pump/utils/math_functions.dart';
+import 'package:variable_speed_pump/screens/pump_curve/pump_curve_logic.dart';
+import 'package:variable_speed_pump/utils/functions.dart';
 
-import 'models/power_pu_curve.dart';
-import 'models/power_pump_curve.dart';
-import 'models/setupApp.dart';
+import '../../models/power_pump_curve.dart';
+import '../../models/power_pump_unit_curve.dart';
+import '../../setupApp.dart';
 
 class PumpPowerCurveChart extends StatelessWidget {
   PumpPowerCurveChart({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final pumpCurvesWithHeads = gi<PowerPumpCurveLogic>();
+    final pumpCurveLogic = gi<PowerPumpCurveLogic>();
 
     return ValueListenableBuilder<List<PowerPumpCurve>>(
-        valueListenable: pumpCurvesWithHeads.powerPumpCurves,
+        valueListenable: pumpCurveLogic.powerPumpCurves,
         builder: (context, pumpCurvesWithHeads, _) {
           List<ChartPumpCurve> chartPumpCurves = pumpCurvesWithHeads.map((pc) {
             final head = pc.head;
@@ -43,12 +43,12 @@ class PUPowerCurveChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final pumpCurvesWithHeads = gi<PowerPumpCurveLogic>();
 
-    return ValueListenableBuilder<List<PowerPUCurve>>(
+    return ValueListenableBuilder<List<PowerPumpUnitCurve>>(
         valueListenable: pumpCurvesWithHeads.powerPUCurves,
         builder: (context, pumpCurvesWithHeads, _) {
           List<ChartPumpCurve> chartPumpCurves = pumpCurvesWithHeads.map((pc) {
             final head = pc.head;
-            final axis = pc.points
+            final axis = pc.powerPumpUnitPoints
                 .map((point) =>
                     Axis(x: point.requiredkW, y: point.pumpCurvePoint.flow))
                 .toList();
@@ -74,12 +74,12 @@ class EfficiencyCurveChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final pumpCurvesWithHeads = gi<PowerPumpCurveLogic>();
 
-    return ValueListenableBuilder<List<PowerPUCurve>>(
+    return ValueListenableBuilder<List<PowerPumpUnitCurve>>(
         valueListenable: pumpCurvesWithHeads.powerPUCurves,
         builder: (context, pumpCurvesWithHeads, _) {
           List<ChartPumpCurve> chartPumpCurves = pumpCurvesWithHeads.map((pc) {
             final head = pc.head;
-            final axis = pc.points
+            final axis = pc.powerPumpUnitPoints
                 .map((point) =>
                     Axis(x: point.requiredkW, y: point.efficiency * 100))
                 .toList();

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:variable_speed_pump/models/pump_curve.dart';
+import 'package:variable_speed_pump/models/pump_curve/pump_curve.dart';
 import 'package:variable_speed_pump/utils/constants.dart';
-import 'package:variable_speed_pump/utils/math_functions.dart';
+import 'package:variable_speed_pump/utils/functions.dart';
 
 void main() {
   test_get_point_with_head();

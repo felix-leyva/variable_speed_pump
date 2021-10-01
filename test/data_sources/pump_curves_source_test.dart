@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:variable_speed_pump/models/data_sources/pump_curves_sources.dart';
-import 'package:variable_speed_pump/models/pump_curve_point.dart';
+import 'package:variable_speed_pump/data_sources/pump_curves_sources.dart';
+import 'package:variable_speed_pump/models/pump_curve_points/pump_curve_point.dart';
 import 'package:variable_speed_pump/utils/constants.dart';
 
 Future<void> main() async {

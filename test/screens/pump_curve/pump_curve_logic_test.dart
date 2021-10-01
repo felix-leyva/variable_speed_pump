@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:variable_speed_pump/models/pump_curve/pump_curve_logic.dart';
+import 'package:variable_speed_pump/screens/pump_curve/pump_curve_logic.dart';
 import 'package:variable_speed_pump/utils/constants.dart';
 
 void main() {

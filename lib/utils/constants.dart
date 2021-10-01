@@ -1,4 +1,4 @@
-import 'package:variable_speed_pump/models/pump_curve_point.dart';
+import 'package:variable_speed_pump/models/pump_curve_points/pump_curve_point.dart';
 
 const double gravity = 9.81;
 const double kWtoHPFactor = 0.745699872;

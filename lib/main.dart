@@ -4,50 +4,41 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:variable_speed_pump/syncfusion_line_chart.dart';
+import 'package:variable_speed_pump/screens/input_table/pump_curve_edit_table.dart';
+import 'package:variable_speed_pump/screens/pump_curve/power_pump_curve_screen.dart';
+import 'package:variable_speed_pump/screens/pump_curve/pump_curve_logic.dart';
 
 import 'models/power_pump_curve.dart';
-import 'models/pump_curve/pump_curve_logic.dart';
-import 'models/setupApp.dart';
+import 'setupApp.dart';
 
 void main() {
   setupApp();
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
+  runApp(MyHomePage());
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+//PumpCurveEditTable()
+
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Graph test'),
-        ),
-        body: PowerPumpCurveLoader(),
-      ),
+      theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.green,
+              primaryColorDark: Colors.red,
+              accentColor: Colors.amber)),
+      routes: {
+        PowerPumpCurveLoader.id: (context) => PowerPumpCurveLoader(),
+        PumpCurveEditTable.id: (context) => PumpCurveEditTable(),
+      },
+      initialRoute: PumpCurveEditTable.id,
     );
   }
 }
@@ -56,20 +47,25 @@ class PowerPumpCurveLoader extends StatelessWidget {
   const PowerPumpCurveLoader({
     Key? key,
   }) : super(key: key);
-
+  static const String id = 'PowerPumpCurveLoader';
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Future.delayed(Duration(seconds: 1)),
-        builder: (context, snapshot) {
-          //TODO: after testing remove this print
-          print("${Timeline.now}, ${gi.isRegistered<PowerPumpCurveLogic>()}");
-          if (gi.isRegistered<PowerPumpCurveLogic>() &&
-              gi.isReadySync<PowerPumpCurveLogic>()) {
-            return PowerPumpCurveBody();
-          } else
-            return Center(child: CircularProgressIndicator());
-        });
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pump Unit Curve with Variable Power'),
+      ),
+      body: FutureBuilder(
+          future: Future.delayed(Duration(seconds: 1)),
+          builder: (context, snapshot) {
+            //TODO: after testing remove this print
+            print("${Timeline.now}, ${gi.isRegistered<PowerPumpCurveLogic>()}");
+            if (gi.isRegistered<PowerPumpCurveLogic>() &&
+                gi.isReadySync<PowerPumpCurveLogic>()) {
+              return PowerPumpCurveBody();
+            } else
+              return Center(child: CircularProgressIndicator());
+          }),
+    );
   }
 }
 

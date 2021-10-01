@@ -1,8 +1,8 @@
 import 'dart:collection';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:variable_speed_pump/models/motor.dart';
-import 'package:variable_speed_pump/utils/math_functions.dart';
+import 'package:variable_speed_pump/models/motor/motor.dart';
+import 'package:variable_speed_pump/utils/functions.dart';
 
 void main() {
   test_motor_rated_efficiency_based_in_power();

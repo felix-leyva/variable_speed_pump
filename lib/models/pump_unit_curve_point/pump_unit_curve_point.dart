@@ -1,10 +1,13 @@
 import 'dart:core';
 
-import 'package:variable_speed_pump/models/pump_curve_point.dart';
+import 'package:variable_speed_pump/models/pump_curve_points/pump_curve_point.dart';
 import 'package:variable_speed_pump/utils/constants.dart';
 
-import 'motor.dart';
+import '../motor/motor.dart';
 
+///PumpUnitCurvePoint is a PumpCurvePoint which implements the effects of having
+///a motor, so it can make the calculations of required power based on that
+///motor efficiency.
 class PumpUnitCurvePoint {
   late PumpCurvePoint pumpCurvePoint;
   late Motor motor;
@@ -16,6 +19,9 @@ class PumpUnitCurvePoint {
   double get efficiency => pumpCurvePoint.wkW / requiredkW;
 
   PumpUnitCurvePoint({required this.pumpCurvePoint, required this.motor});
+
+  //These constructors are not being used yet, due that the PowerPumpUnitCurve
+  //is generated on the go
 
   ///Constructor which requires the PumpEnd efficiency and estimates motor
   ///efficiency and power based in IE3 standard

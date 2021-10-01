@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:variable_speed_pump/models/pump_curve_point.dart';
-import 'package:variable_speed_pump/utils/math_functions.dart';
+import 'package:variable_speed_pump/models/pump_curve_points/pump_curve_point.dart';
+import 'package:variable_speed_pump/utils/functions.dart';
 
 void main() {
   test_whenConstructingWithEff();

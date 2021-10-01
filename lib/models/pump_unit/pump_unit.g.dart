@@ -1,46 +1,41 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'pump_curve_point.dart';
+part of 'pump_unit.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class PumpCurvePointAdapter extends TypeAdapter<PumpCurvePoint> {
+class PumpUnitAdapter extends TypeAdapter<PumpUnit> {
   @override
-  final int typeId = 1;
+  final int typeId = 4;
 
   @override
-  PumpCurvePoint read(BinaryReader reader) {
+  PumpUnit read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return PumpCurvePoint()
-      ..rpm = fields[0] as double
-      ..flow = fields[1] as double
-      ..head = fields[2] as double
-      ..pumpEndEff = fields[3] as double
-      ..wHp = fields[4] as double
-      ..bHp = fields[5] as double;
+    return PumpUnit(
+      motor: fields[0] as Motor,
+      pumpCurve: fields[1] as PumpCurve,
+    )
+      ..name = fields[2] as String
+      ..key = fields[3] as String;
   }
 
   @override
-  void write(BinaryWriter writer, PumpCurvePoint obj) {
+  void write(BinaryWriter writer, PumpUnit obj) {
     writer
-      ..writeByte(6)
-      ..writeByte(0)
-      ..write(obj.rpm)
-      ..writeByte(1)
-      ..write(obj.flow)
-      ..writeByte(2)
-      ..write(obj.head)
-      ..writeByte(3)
-      ..write(obj.pumpEndEff)
       ..writeByte(4)
-      ..write(obj.wHp)
-      ..writeByte(5)
-      ..write(obj.bHp);
+      ..writeByte(0)
+      ..write(obj.motor)
+      ..writeByte(1)
+      ..write(obj.pumpCurve)
+      ..writeByte(2)
+      ..write(obj.name)
+      ..writeByte(3)
+      ..write(obj.key);
   }
 
   @override
@@ -49,7 +44,7 @@ class PumpCurvePointAdapter extends TypeAdapter<PumpCurvePoint> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PumpCurvePointAdapter &&
+      other is PumpUnitAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
