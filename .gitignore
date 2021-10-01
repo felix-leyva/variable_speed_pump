@@ -44,3 +44,44 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/references/1649114.pdf
+/references/10097517.pdf
+/references/14814360.ppt
+/references/A_novel_method_to_determine_the_motor_ef.pdf
+/references/Air System Fans_ Engineering Reference — EnergyPlus 8.3.pdf
+/references/amo_motors_handbook_web.pdf
+/references/amo_motors_handbook_web.svg
+/references/auslegung-en-data.pdf
+/default_pump_unit.hive
+/default_pump_unit.lock
+/references/e177content.pdf
+/references/efficiency.pdf
+/references/efficiency part 1.pdf
+/references/efficiency part 2.pdf
+/references/efficiency part 3.pdf
+/references/efficiency part 4.pdf
+/references/efficiency part 5.pdf
+/references/efficiency part 6.pdf
+/references/energy calculator system.xlsx
+/references/energy calculator ww.xlsx
+/references/FireShot Capture 110 - SP 125-3 - 17A01903 - Grundfos - product-selection.grundfos.com.png
+/references/FireShot Capture 111 - Induced power - Grundfos - www.grundfos.com.png
+/.fvm/flutter_sdk/
+/.fvm/fvm_config.json
+/references/m125content.pdf
+/references/m204content.pdf
+/references/m346content.pdf
+/references/m388content.pdf
+/references/m583content.pdf
+/references/motor-normalized-efficiency-vs.-motor-load.png
+/references/motor_tip_sheet11.pdf
+/pump_curves_box.hive
+/pump_curves_box.lock
+/pump_unit_box.hive
+/pump_unit_box.lock
+/pump_unit_names_box.hive
+/pump_unit_names_box.lock
+/references/r06004.pdf
+/references/slide_14.jpg
+/references/solve_polynomial 3 equation 3 points.xlsx
+/references/variable_speed_pumping.pdf
