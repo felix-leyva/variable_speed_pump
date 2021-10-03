@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
@@ -12,7 +13,10 @@ import 'package:variable_speed_pump/screens/input_table/pump_curve_edit_table.da
 
 class PumpCurveInputLogic {
   late final PumpUnitSource source;
-  late PumpUnit pumpUnit; //as parameter due we need to access motor later
+  late ValueNotifier<PumpUnit>
+      pumpUnit; //as parameter due we need to access motor later
+
+  Timer? fieldDebounce;
 
   ValueNotifier<bool> editEff = ValueNotifier(true);
   String currentKey = '';
@@ -29,17 +33,17 @@ class PumpCurveInputLogic {
   }) {
     this.source = source ?? GetIt.I.get<PumpUnitSource>();
     if (startingPumpUnit != null) {
-      pumpUnit = startingPumpUnit;
+      pumpUnit = ValueNotifier(startingPumpUnit);
     } else if (pumpUnitKey != null) {
-      pumpUnit = this.source.getPumpUnitWithKey(pumpUnitKey);
+      pumpUnit = ValueNotifier(this.source.getPumpUnitWithKey(pumpUnitKey));
     } else {
-      pumpUnit = this.source.getFirstPumpUnit();
+      pumpUnit = ValueNotifier(this.source.getFirstPumpUnit());
     }
 
     pumpUnitNames.value = this.source.getListOfPumpUnits();
-    currentKey = pumpUnit.key;
+    currentKey = pumpUnit.value.key;
     pumpCurvePointInputs = ValueNotifier(pumpCurvePointInputsFromPumpUnit(
-      pumpUnit: pumpUnit,
+      pumpUnit: pumpUnit.value,
       useEfficiency: editEff.value,
     ));
   }
@@ -50,35 +54,44 @@ class PumpCurveInputLogic {
 
   void updateFlow(int pointIndex, double newFlow) {
     //TODO: add validation considering previous and next points
-    pumpCurvePointInputs.value[pointIndex].flow = newFlow;
-    savePumpUnitIntoDataSource();
+    debounceFunction(() {
+      pumpCurvePointInputs.value[pointIndex].flow = newFlow;
+      pumpCurvePointInputs.notifyListeners();
+      savePumpUnitIntoDataSource();
+    });
   }
 
   void updateHead(int pointIndex, double newHead) {
     //TODO: add validation considering previous and next points
-    pumpCurvePointInputs.value[pointIndex].head = newHead;
-    savePumpUnitIntoDataSource();
+    debounceFunction(() {
+      pumpCurvePointInputs.value[pointIndex].head = newHead;
+      pumpCurvePointInputs.notifyListeners();
+      savePumpUnitIntoDataSource();
+    });
   }
 
   void updateEffOrPower(int pointIndex, double newValue) {
     //TODO: add validation considering previous and next points
-    if (editEff.value) {
-      pumpCurvePointInputs.value[pointIndex].efficiencyOrPower = newValue;
-    } else {
-      //TODO: estimate eff from power value
-      // pumpCurvePointInputs.value[pointIndex].efficiencyOrPower = newValue;
-    }
-    savePumpUnitIntoDataSource();
+    debounceFunction(() {
+      if (editEff.value) {
+        pumpCurvePointInputs.value[pointIndex].efficiencyOrPower = newValue;
+      } else {
+        //TODO: estimate eff from power value
+        // pumpCurvePointInputs.value[pointIndex].efficiencyOrPower = newValue;
+      }
+      pumpCurvePointInputs.notifyListeners();
+      savePumpUnitIntoDataSource();
+    });
   }
 
   void savePumpUnitIntoDataSource() {
     updatePumpUnitFromCurvePoints();
-    source.updateOrAddPumpUnit(currentKey, pumpUnit);
+    source.updateOrAddPumpUnit(currentKey, pumpUnit.value);
     updateValueNotifiers();
   }
 
   void updateValueNotifiers() {
-    pumpUnit = source.getPumpUnitWithKey(currentKey);
+    pumpUnit.value = source.getPumpUnitWithKey(currentKey);
     pumpUnitNames.value = this.source.getListOfPumpUnits();
   }
 
@@ -131,11 +144,24 @@ class PumpCurveInputLogic {
       );
     } else {
       //TODO: estimate the required motor
-      pumpCurve = pumpUnit.pumpCurve;
+      pumpCurve = pumpUnit.value.pumpCurve;
     }
 
     Motor newMotor = Motor(pumpCurve.getMotorPowerSegment());
     print('Motor power ${newMotor.powerkW}');
-    this.pumpUnit = pumpUnit.copyWith(pumpCurve: pumpCurve, motor: newMotor);
+    this.pumpUnit.value =
+        pumpUnit.value.copyWith(pumpCurve: pumpCurve, motor: newMotor);
+  }
+
+  void changePumpUnitName(String newName) {
+    debounceFunction(() {
+      this.pumpUnit.value = pumpUnit.value.copyWith(name: newName);
+      savePumpUnitIntoDataSource();
+    });
+  }
+
+  void debounceFunction(VoidCallback function) {
+    if (fieldDebounce?.isActive ?? false) fieldDebounce?.cancel();
+    fieldDebounce = Timer(const Duration(milliseconds: 500), function);
   }
 }

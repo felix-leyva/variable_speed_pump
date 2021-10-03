@@ -6,9 +6,7 @@ import 'package:variable_speed_pump/models/pump_curve/pump_curve.dart';
 import 'package:variable_speed_pump/models/pump_unit/pump_unit.dart';
 import 'package:variable_speed_pump/screens/input_table/pump_curve_input_logic.dart';
 import 'package:variable_speed_pump/screens/pump_curve/pump_curve_logic.dart';
-import 'package:variable_speed_pump/utils/constants.dart';
 
-import 'data_sources/pump_curves_sources.dart';
 import 'models/pump_curve/pump_curve.dart';
 import 'models/pump_curve_points/pump_curve_point.dart';
 
@@ -21,13 +19,6 @@ void setupApp() async {
     ..registerAdapter(MotorAdapter())
     ..registerAdapter(PumpCurveAdapter())
     ..registerAdapter(PumpUnitAdapter());
-
-  gi.registerSingletonAsync<PumpCurvesSources>(
-    () async {
-      Box<List> box = await Hive.openBox<List>(pumpCurveBoxName);
-      return PumpCurvesDB(box);
-    },
-  );
 
   gi.registerSingletonAsync<PumpUnitSource>(
     () async {
@@ -51,7 +42,7 @@ void setupApp() async {
   gi.registerSingletonWithDependencies<PowerPumpCurveLogic>(
     () => PowerPumpCurveLogic(),
     dependsOn: [
-      PumpCurvesSources,
+      PumpUnitSource,
     ],
   );
 }
