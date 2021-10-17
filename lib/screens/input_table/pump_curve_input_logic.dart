@@ -124,7 +124,7 @@ class PumpCurveInputLogic {
   void deleteCurrentPumpUnit() {
     if (pumpUnitNames.value.length > 1) source.deletePumpUnit(currentKey.value);
     currentKey.value = pumpUnitNames.value.keys.first;
-    _updateValueNotifiers();
+    openPumpUnit(null);
   }
 
   void _updatePumpUnitFromCurvePoints() {

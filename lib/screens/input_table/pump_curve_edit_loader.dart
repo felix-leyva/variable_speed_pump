@@ -1,6 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
+import 'package:variable_speed_pump/screens/dialogs/delete_pump_unit_dialog.dart';
 import 'package:variable_speed_pump/screens/dialogs/input_name_to_save_PU.dart';
 import 'package:variable_speed_pump/screens/dialogs/open_pump_unit_list_dialog.dart';
 import 'package:variable_speed_pump/screens/input_table/pump_curve_edit_table.dart';
@@ -29,23 +32,9 @@ class PumpCurveEditLoader extends StatelessWidget {
             appBar: AppBar(
               title: Text('Edit Pump Curve'),
               actions: [
-                IconButton(
-                  onPressed: () => savePUDialog(
-                    context: context,
-                    saveFunction: (name) => GetIt.I
-                        .get<PumpCurveInputLogic>()
-                        .createNewPumpUnitWithName(name),
-                  ),
-                  icon: Icon(Icons.add),
-                ),
-                IconButton(
-                  onPressed: () => openPumpDialog(
-                    context: context,
-                    openFunction: (key) =>
-                        GetIt.I.get<PumpCurveInputLogic>().openPumpUnit(key),
-                  ),
-                  icon: Icon(Icons.folder_open),
-                ),
+                DeletePUButton(),
+                SavePUButton(),
+                OpenPUButton(),
               ],
             ),
             body: PumpCurveEditBody(),
@@ -53,6 +42,65 @@ class PumpCurveEditLoader extends StatelessWidget {
         }
       },
     );
+  }
+}
+
+class OpenPUButton extends StatelessWidget {
+  const OpenPUButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () => openPumpDialog(
+        context: context,
+        openFunction: (key) =>
+            GetIt.I.get<PumpCurveInputLogic>().openPumpUnit(key),
+      ),
+      icon: Icon(Icons.folder_open),
+    );
+  }
+}
+
+class SavePUButton extends StatelessWidget {
+  const SavePUButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () => savePUDialog(
+        context: context,
+        saveFunction: (name) =>
+            GetIt.I.get<PumpCurveInputLogic>().createNewPumpUnitWithName(name),
+      ),
+      icon: Icon(Icons.add),
+    );
+  }
+}
+
+class DeletePUButton extends StatelessWidget {
+  const DeletePUButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<LinkedHashMap<String, String>>(
+        valueListenable: gi.get<PumpCurveInputLogic>().pumpUnitNames,
+        builder: (context, names, _) {
+          final deletePUDialog = () => deletePumpUnitDialog(
+                context: context,
+                deleteFunction: () =>
+                    gi.get<PumpCurveInputLogic>().deleteCurrentPumpUnit(),
+              );
+          return IconButton(
+            onPressed: names.length <= 1 ? null : deletePUDialog,
+            icon: Icon(Icons.delete),
+          );
+        });
   }
 }
 
