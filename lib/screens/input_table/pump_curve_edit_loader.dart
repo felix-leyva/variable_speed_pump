@@ -1,29 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get_it/get_it.dart';
+import 'package:variable_speed_pump/screens/dialogs/input_name_to_save_PU.dart';
+import 'package:variable_speed_pump/screens/dialogs/open_pump_unit_list_dialog.dart';
 import 'package:variable_speed_pump/screens/input_table/pump_curve_edit_table.dart';
 import 'package:variable_speed_pump/screens/input_table/pump_curve_input_charts.dart';
 import 'package:variable_speed_pump/screens/input_table/pump_curve_input_logic.dart';
 import 'package:variable_speed_pump/screens/input_table/pump_curve_name_input.dart';
 
 import '../../setupApp.dart';
+import '../drawer_menu.dart';
 
 class PumpCurveEditLoader extends StatelessWidget {
   const PumpCurveEditLoader({Key? key}) : super(key: key);
-  static const id = 'PumpCurveEditLoader';
+  static const id = '/PumpCurveEditLoader';
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Pump Curve'),
-      ),
-      body: FutureBuilder(
-          future: Future.delayed(Duration(seconds: 1), () => gi.allReady()),
-          builder: (context, snapshot) {
-            if (gi.isRegistered<PumpCurveInputLogic>() && snapshot.hasData) {
-              return PumpCurveEditBody();
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          }),
+    return FutureBuilder(
+      future: gi.isReady<PumpCurveInputLogic>(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          gi.get<PumpCurveInputLogic>().openPumpUnit(null);
+          return Scaffold(
+            drawer: drawerMenu(context, id),
+            appBar: AppBar(
+              title: Text('Edit Pump Curve'),
+              actions: [
+                IconButton(
+                  onPressed: () => savePUDialog(
+                    context: context,
+                    saveFunction: (name) => GetIt.I
+                        .get<PumpCurveInputLogic>()
+                        .createNewPumpUnitWithName(name),
+                  ),
+                  icon: Icon(Icons.add),
+                ),
+                IconButton(
+                  onPressed: () => openPumpDialog(
+                    context: context,
+                    openFunction: (key) =>
+                        GetIt.I.get<PumpCurveInputLogic>().openPumpUnit(key),
+                  ),
+                  icon: Icon(Icons.folder_open),
+                ),
+              ],
+            ),
+            body: PumpCurveEditBody(),
+          );
+        }
+      },
     );
   }
 }
@@ -37,7 +65,7 @@ class PumpCurveEditBody extends StatelessWidget {
       children: [
         Flexible(flex: 3, child: NormalPumpCurve()),
         Flexible(flex: 2, child: EfficiencyPumpCurve()),
-        Flexible(flex: 1, child: PumpCurveNameInput()),
+        Flexible(flex: 0, child: PumpCurveNameInput()),
         Flexible(flex: 5, child: PumpCurveInputList()),
       ],
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
+import 'package:variable_speed_pump/models/pump_curve_point_input/pump_curve_point_input.dart';
 import 'package:variable_speed_pump/screens/input_table/pump_curve_input_logic.dart';
 import 'package:variable_speed_pump/utils/functions.dart';
 
@@ -145,19 +146,11 @@ class ColumnInputField extends StatelessWidget {
               activatedNegativeValues: false, decimalRange: 2)
         ],
         keyboardType: TextInputType.numberWithOptions(decimal: true),
-        onChanged: textChanged,
+        onChanged: (text) {
+          textChanged(text);
+        },
         controller: controller,
       ),
     );
   }
-}
-
-class PumpCurvePointInput {
-  double flow;
-  double head;
-  double efficiencyOrPower;
-  PumpCurvePointInput(
-      {required this.flow,
-      required this.head,
-      required this.efficiencyOrPower});
 }

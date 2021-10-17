@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:variable_speed_pump/data_sources/preferences_sources.dart';
 import 'package:variable_speed_pump/data_sources/pump_unit_sources.dart';
 import 'package:variable_speed_pump/models/motor/motor.dart';
 import 'package:variable_speed_pump/models/pump_curve/pump_curve.dart';
@@ -12,7 +13,7 @@ import 'models/pump_curve_points/pump_curve_point.dart';
 
 final GetIt gi = GetIt.I;
 
-void setupApp() async {
+Future setupApp() async {
   await Hive.initFlutter();
   Hive
     ..registerAdapter(PumpCurvePointAdapter())
@@ -33,16 +34,25 @@ void setupApp() async {
     },
   );
 
-  gi.registerSingletonWithDependencies<PumpCurveInputLogic>(
-      () => PumpCurveInputLogic(),
-      dependsOn: [
-        PumpUnitSource,
-      ]);
+  gi.registerSingletonAsync<PreferencesSource>(() async {
+    Box<String> preferencesBox =
+        await Hive.openBox<String>(PreferencesDb.boxName);
+    return PreferencesDb(preferencesBox);
+  });
 
-  gi.registerSingletonWithDependencies<PowerPumpCurveLogic>(
-    () => PowerPumpCurveLogic(),
-    dependsOn: [
-      PumpUnitSource,
-    ],
+  gi.registerLazySingletonAsync<PumpCurveInputLogic>(
+    () async {
+      await gi.isReady<PumpUnitSource>();
+      await gi.isReady<PreferencesSource>();
+      return PumpCurveInputLogic();
+    },
   );
+
+  gi.registerLazySingletonAsync<PowerPumpCurveLogic>(() async {
+    await gi.isReady<PumpUnitSource>();
+    await gi.isReady<PreferencesSource>();
+    return PowerPumpCurveLogic();
+  });
+
+  return Future;
 }

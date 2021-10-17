@@ -6,8 +6,8 @@ import 'package:variable_speed_pump/screens/pump_curve/power_pump_curve_loader.d
 
 import 'setupApp.dart';
 
-void main() {
-  setupApp();
+void main() async {
+  await setupApp();
   runApp(MyHomePage());
 }
 

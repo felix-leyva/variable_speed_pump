@@ -1,4 +1,7 @@
+import 'package:variable_speed_pump/models/motor/motor.dart';
+import 'package:variable_speed_pump/models/pump_curve/pump_curve.dart';
 import 'package:variable_speed_pump/models/pump_curve_points/pump_curve_point.dart';
+import 'package:variable_speed_pump/models/pump_unit/pump_unit.dart';
 
 const double gravity = 9.81;
 const double kWtoHPFactor = 0.745699872;
@@ -16,3 +19,6 @@ final List<PumpCurvePoint> pumpCurve = [
   PumpCurvePoint.withEfficiency(pumpEndEff: .83, flow: 454.34, head: 38.10),
   PumpCurvePoint.withEfficiency(pumpEndEff: .74, flow: 511.13, head: 30.48),
 ];
+
+final PumpUnit startingPU = PumpUnit(
+    motor: Motor(1), pumpCurve: PumpCurve(points: pumpCurve, rpm: 3600));

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:variable_speed_pump/screens/input_table/pump_curve_edit_table.dart';
+import 'package:variable_speed_pump/models/pump_curve_point_input/pump_curve_point_input.dart';
 import 'package:variable_speed_pump/screens/input_table/pump_curve_input_logic.dart';
 import 'package:variable_speed_pump/utils/functions.dart';
 

@@ -36,8 +36,8 @@ class PumpUnit {
       String? pumpUnitName,
       String? startKey}) {
     this.key = startKey ?? nanoid(10);
-    this.name = pumpUnitName ??
-        DateTime.fromMillisecondsSinceEpoch(0).toIso8601String();
+    this.name =
+        pumpUnitName ?? DateTime.now().millisecondsSinceEpoch.toString();
   }
 
   PumpUnit.fromPumpCurve(
@@ -62,5 +62,10 @@ class PumpUnit {
       pumpUnitName: name ?? this.name,
       startKey: key ?? this.key,
     );
+  }
+
+  PumpUnit duplicateWithName({required String newName}) {
+    final newPump = copyWith(name: newName, key: nanoid(10));
+    return newPump;
   }
 }
