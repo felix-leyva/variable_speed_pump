@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:variable_speed_pump/screens/pump_curve/power_pump_curve_loader.dart';
+import 'package:variable_speed_pump/screens/variable_speed_curves/variable_speed_curves_loader.dart';
 
-import 'input_table/pump_curve_edit_loader.dart';
+import '../screens/input_table/pump_curve_edit_loader.dart';
+import 'navigation.dart';
 
 Widget drawerMenu(BuildContext context, String idLoader) {
   return Drawer(
@@ -16,10 +18,7 @@ Widget drawerMenu(BuildContext context, String idLoader) {
               Text('View Power Pump Curves'),
             ],
           ),
-          onTap: () async {
-            await Navigator.pushReplacementNamed(
-                context, PowerPumpCurveLoader.id);
-          },
+          onTap: () => loadPage(context, PowerPumpCurveLoader.id),
         ),
         ListTile(
           enabled: idLoader != PumpCurveEditLoader.id ? true : false,
@@ -29,10 +28,17 @@ Widget drawerMenu(BuildContext context, String idLoader) {
               Text('Edit Pump Curves'),
             ],
           ),
-          onTap: () async {
-            await Navigator.pushReplacementNamed(
-                context, PumpCurveEditLoader.id);
-          },
+          onTap: () => loadPage(context, PumpCurveEditLoader.id),
+        ),
+        ListTile(
+          enabled: idLoader != VariableSpeedCurvesLoader.id ? true : false,
+          title: Row(
+            children: [
+              Icon(Icons.multiline_chart),
+              Text('Variable Speed Curves'),
+            ],
+          ),
+          onTap: () => loadPage(context, VariableSpeedCurvesLoader.id),
         ),
       ],
     ),

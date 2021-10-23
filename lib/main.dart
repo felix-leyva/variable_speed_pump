@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:variable_speed_pump/screens/input_table/pump_curve_edit_loader.dart';
 import 'package:variable_speed_pump/screens/pump_curve/power_pump_curve_loader.dart';
+import 'package:variable_speed_pump/screens/variable_speed_curves/variable_speed_curves_loader.dart';
 
 import 'setupApp.dart';
 
@@ -25,6 +26,7 @@ class MyHomePage extends StatelessWidget {
       routes: {
         PowerPumpCurveLoader.id: (context) => PowerPumpCurveLoader(),
         PumpCurveEditLoader.id: (context) => PumpCurveEditLoader(),
+        VariableSpeedCurvesLoader.id: (context) => VariableSpeedCurvesLoader(),
       },
       initialRoute: PowerPumpCurveLoader.id,
     );

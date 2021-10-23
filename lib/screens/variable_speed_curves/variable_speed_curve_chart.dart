@@ -1,22 +1,23 @@
-import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:variable_speed_pump/models/curve_charts/chart_pump_curve.dart';
 import 'package:variable_speed_pump/models/curve_charts/pump_curve_chart_axis.dart';
 import 'package:variable_speed_pump/utils/functions.dart';
 
-class PumpCurveChart extends StatelessWidget {
-  const PumpCurveChart({
+class VariableSpeedCurveChart extends StatelessWidget {
+  const VariableSpeedCurveChart({
     Key? key,
-    required this.chartPumpCurves,
-    required this.xAxisTitle,
     required this.yAxisTitle,
-    required this.lineColor,
+    required this.xAxisTitle,
+    required this.chartCurves,
+    required this.lineColors,
   }) : super(key: key);
 
-  final List<ChartPumpCurve> chartPumpCurves;
+  final List<ChartPumpCurve> chartCurves;
   final String xAxisTitle;
   final String yAxisTitle;
-  final Color lineColor;
+  final List<Color> lineColors;
 
   @override
   Widget build(BuildContext context) {
@@ -39,19 +40,25 @@ class PumpCurveChart extends StatelessWidget {
         enable: true,
         activationMode: ActivationMode.longPress,
       ),
-      series: series(chartPumpCurves, lineColor),
+      series: series(chartCurves, lineColors),
     );
   }
 
   List<LineSeries<PumpCurveChartAxis, double>> series(
-      List<ChartPumpCurve> chartPumpCurve, Color lineColor) {
-    return chartPumpCurve
-        .map((pumpCurve) => LineSeries<PumpCurveChartAxis, double>(
-            color: lineColor,
-            name: "${pumpCurve.nameVal} m",
+      List<ChartPumpCurve> chartPumpCurves, List<Color> lineColors) {
+    return chartPumpCurves
+        .mapIndexed(
+          (index, pumpCurve) => LineSeries<PumpCurveChartAxis, double>(
+            color: lineColors[index],
+            name: "${pumpCurve.nameVal.roundD(0)} rpm",
             dataSource: pumpCurve.axis,
             xValueMapper: (pcp, _) => pcp.x.roundD(1),
-            yValueMapper: (pcp, _) => pcp.y.roundD(1)))
+            yValueMapper: (pcp, _) => pcp.y.roundD(1),
+            markerSettings: MarkerSettings(isVisible: true),
+            legendItemText: "${pumpCurve.nameVal.roundD(0)} rpm",
+            isVisibleInLegend: true,
+          ),
+        )
         .toList();
   }
 }

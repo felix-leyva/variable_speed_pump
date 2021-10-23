@@ -11,8 +11,8 @@ import 'package:variable_speed_pump/screens/input_table/pump_curve_input_charts.
 import 'package:variable_speed_pump/screens/input_table/pump_curve_input_logic.dart';
 import 'package:variable_speed_pump/screens/input_table/pump_curve_name_input.dart';
 
+import '../../navigation/drawer_menu.dart';
 import '../../setupApp.dart';
-import '../drawer_menu.dart';
 
 class PumpCurveEditLoader extends StatelessWidget {
   const PumpCurveEditLoader({Key? key}) : super(key: key);
@@ -54,6 +54,7 @@ class OpenPUButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () => openPumpDialog(
+        pumpUnitNames: gi<PumpCurveInputLogic>().pumpUnitNames.value,
         context: context,
         openFunction: (key) =>
             GetIt.I.get<PumpCurveInputLogic>().openPumpUnit(key),

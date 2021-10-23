@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:variable_speed_pump/models/curve_charts/chart_pump_curve.dart';
+import 'package:variable_speed_pump/models/curve_charts/pump_curve_chart_axis.dart';
 import 'package:variable_speed_pump/screens/pump_curve/pump_curve_chart.dart';
 import 'package:variable_speed_pump/screens/pump_curve/pump_curve_logic.dart';
 
@@ -21,7 +23,7 @@ class PumpPowerCurveChart extends StatelessWidget {
                 .map((point) => PumpCurveChartAxis(
                     x: point.pumpCurvePoint.head, y: point.pumpCurvePoint.flow))
                 .toList();
-            return ChartPumpCurve(head: head, axis: axis);
+            return ChartPumpCurve(nameVal: head, axis: axis);
           }).toList();
 
           return PumpCurveChart(
@@ -49,7 +51,7 @@ class PUPowerCurveChart extends StatelessWidget {
                 .map((point) => PumpCurveChartAxis(
                     x: point.requiredkW, y: point.pumpCurvePoint.flow))
                 .toList();
-            return ChartPumpCurve(head: head, axis: axis);
+            return ChartPumpCurve(nameVal: head, axis: axis);
           }).toList();
 
           return PumpCurveChart(
@@ -78,7 +80,7 @@ class EfficiencyCurveChart extends StatelessWidget {
                 .map((point) => PumpCurveChartAxis(
                     x: point.requiredkW, y: point.efficiency * 100))
                 .toList();
-            return ChartPumpCurve(head: head, axis: axis);
+            return ChartPumpCurve(nameVal: head, axis: axis);
           }).toList();
 
           return PumpCurveChart(

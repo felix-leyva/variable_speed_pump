@@ -39,6 +39,6 @@ class VariableSpeedCurvesLogic {
     _preferencesSource.setCurrentPUKey(pumpUnit.value.key);
 
     speedPumpCurves.value =
-        pumpUnit.value.pumpCurve.pumpCurvesWithSpeedRanges() ?? [];
+        pumpUnit.value.pumpCurve.pumpCurvesWithSpeedRanges(steps: 5) ?? [];
   }
 }
