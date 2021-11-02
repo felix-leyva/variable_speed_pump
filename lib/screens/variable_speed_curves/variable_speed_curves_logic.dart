@@ -30,6 +30,7 @@ class VariableSpeedCurvesLogic {
         source ?? await GetIt.I.getAsync<PumpUnitSource>();
     this._preferencesSource =
         preferences ?? await GetIt.I.getAsync<PreferencesSource>();
+    pumpUnitNames.value = _dbPumpUnitsSource.getListOfPumpUnits();
     setPumpCurves(_preferencesSource.getCurrentPUKey());
   }
 

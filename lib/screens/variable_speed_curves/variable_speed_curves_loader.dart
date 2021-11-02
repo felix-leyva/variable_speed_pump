@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:variable_speed_pump/navigation/drawer_menu.dart';
+import 'package:variable_speed_pump/screens/dialogs/open_pump_unit_list_dialog.dart';
 import 'package:variable_speed_pump/screens/variable_speed_curves/variable_speed_curves_body.dart';
 import 'package:variable_speed_pump/screens/variable_speed_curves/variable_speed_curves_logic.dart';
 
@@ -23,7 +24,19 @@ class VariableSpeedCurvesLoader extends StatelessWidget {
             drawer: drawerMenu(context, id),
             appBar: AppBar(
               title: Text('Variable speed curves'),
-              actions: [], //TODO: add open action
+              actions: [
+                IconButton(
+                  onPressed: () => openPumpDialog(
+                    context: context,
+                    openFunction: (currentPUKey) => gi
+                        .get<VariableSpeedCurvesLogic>()
+                        .setPumpCurves(currentPUKey),
+                    pumpUnitNames:
+                        gi.get<VariableSpeedCurvesLogic>().pumpUnitNames.value,
+                  ),
+                  icon: Icon(Icons.folder_open),
+                ),
+              ],
             ),
             body: VariableSpeedCurvesBody(),
           );
