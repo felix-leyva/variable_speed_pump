@@ -78,8 +78,8 @@ void test_creating_various_pump_curves_with_lower_speed() {
 
     final variousPumpCurves = await myPumpCurve.pumpCurvesWithSpeedRanges();
     if (variousPumpCurves == null) throw ("Null value returned");
-    final pcp1 = variousPumpCurves[59];
-    final pcp2 = variousPumpCurves[29];
+    final pcp1 = variousPumpCurves[60];
+    final pcp2 = variousPumpCurves[30];
 
     expect(pcp1.points[0].flow.roundD(1), 56.8);
     expect(pcp1.points[0].head.roundD(1), 15.2);

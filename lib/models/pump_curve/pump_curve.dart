@@ -67,12 +67,15 @@ class PumpCurve {
   List<PumpCurve>? pumpCurvesWithSpeedRanges({int steps = 60, double? minRPM}) {
     final double lastRPM = minRPM ?? this.rpm / 2;
     if (steps < 1 || lastRPM > rpm) return null;
-    final double minPercentage = (lastRPM / rpm);
-    final double step = minPercentage / steps;
-    final List<double> range =
-        List.generate(steps, (index) => minPercentage + (index * step))
-            .reversed
-            .toList();
+    final double stepRPM = (this.rpm - lastRPM) / steps;
+
+    final List<double> range = [];
+
+    for (var i = this.rpm; i > lastRPM; i = i - stepRPM) {
+      range.add(i / this.rpm);
+    }
+    range.add(lastRPM / this.rpm);
+
     final List<PumpCurve> pumpCurvesList = [];
     range.forEach((per) {
       var modPumpCurve = pumpCurveWithSpeed(per);
@@ -87,8 +90,8 @@ class PumpCurve {
   ///head coincides. It chooses thoses points and generate a PowerPumpCurve where
   ///all those points have a fixed head, but variable power/speed.
   PowerPumpCurve powerPumpCurveWithHead({
-    int steps = 60,
-    double minRPM = 1800,
+    int steps = 240,
+    double minRPM = 100,
     required double head,
   }) {
     List<PumpCurve>? pumpCurves =

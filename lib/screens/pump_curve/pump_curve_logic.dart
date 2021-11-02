@@ -66,7 +66,7 @@ class PowerPumpCurveLogic {
       if (head > max) max = head;
       if (head < min) min = head;
     });
-    this.minHead = (min * 0.75).roundD(1);
+    this.minHead = (min * 0.70).roundD(1);
     this.maxHead = (max * 0.98).roundD(1);
     double startHead = ((minHead + maxHead) * 0.6).roundD(1);
     this._headList = [startHead];
